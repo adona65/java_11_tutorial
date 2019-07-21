@@ -1,6 +1,8 @@
 package tutorial_000.languageNewFeatures;
 
 import java.io.IOException;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpClient.Redirect;
@@ -213,6 +215,26 @@ public class _008_Http2Api {
 	     * waiting for them to complete, the program ends immediately after the ten sends and we never see any results. So, in order to get our outputs, we
 	     * call the CompletableFuture.allOf() method, that await all the CompletableFutures passed in complete.
 	     */
+	    
+	    System.out.println("=====================================");
+	    
+	    /*
+	     * Finally, we are able to perform authorization via BASIC-AUTH.
+	     */
+	    var authRequest = HttpRequest.newBuilder()
+	    		.uri(URI.create("https://postman-echo.com/basic-auth"))
+	    		.build();
+	    var authClient = HttpClient.newBuilder()
+	    		.authenticator(new Authenticator() {
+	    			@Override
+	    			protected PasswordAuthentication getPasswordAuthentication() {
+	    				return new PasswordAuthentication("postman", "password".toCharArray());
+	    			}
+	    		})
+	    		.build();
+	    var authResponse = authClient.send(authRequest, HttpResponse.BodyHandlers.ofString());
+	    System.out.println(authResponse.statusCode()); // 200
+
 	}
 
 }

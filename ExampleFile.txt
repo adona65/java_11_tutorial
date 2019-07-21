@@ -1,0 +1,2 @@
+1: This is a string to file test
+2: Second line
